@@ -1,0 +1,56 @@
+
+package count;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class WordCount {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Word Count Program");
+        System.out.println("Enter '1' to input text, or '2' to provide a file:");
+        int choice = scanner.nextInt();
+        scanner.nextLine(); 
+
+        String text = "";
+
+        if (choice == 1) {
+            System.out.println("Enter the text:");
+            text = scanner.nextLine();
+        } else if (choice == 2) {
+            System.out.println("Enter the file path:");
+            String filePath = scanner.nextLine();
+            try {
+                text = readTextFromFile(filePath);
+            } catch (IOException e) {
+                System.err.println("Error reading the file: " + e.getMessage());
+                e.printStackTrace();
+                System.exit(1);
+            }
+        } else {
+            System.out.println("Invalid choice. Please enter '1' or '2'.");
+            System.exit(1);
+        }
+
+        int wordCount = countWords(text);
+        System.out.println("Total word count: " + wordCount);
+    }
+
+    public static int countWords(String text) {
+        String[] words = text.split("[\\s\\p{Punct}]+"); 
+        return words.length;
+    }
+
+    public static String readTextFromFile(String filePath) throws IOException {
+        StringBuilder text = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                text.append(line).append(" ");
+            }
+        }
+        return text.toString();
+    }
+}
